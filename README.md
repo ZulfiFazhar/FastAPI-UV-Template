@@ -102,33 +102,31 @@ The application will be available at `http://localhost:8000`.
 ```
 fastapi-uv/
 ├── app/
-│   ├── api/              # API module with routes
+│   ├── api/                  # API module with routes
 │   │   └── routes.py
-│   ├── core/             # Core configuration and application logic
+│   ├── core/                 # Core configuration and application logic
 │   │   └── config.py
-│   ├── models/           # Pydantic data models (if any)
-│   └── main.py           # FastAPI application entry point
-├── .env                  # Configuration file (ignored by git)
-├── Dockerfile            # Docker build definition
-├── pyproject.toml        # Project and dependency definition
-└── uv.lock               # Lock file for dependencies
+│   ├── ml/                   # Machine learning related code
+│   │   ├── inference/        # Inference logic
+│   │   ├── models/           # ML model files (.pt, .h5, .pkl)
+│   │   └── preprocessing/    # Training scripts
+│   ├── models/               # Python models (ORM, DTOs, Domain)
+│   ├── services/             # Business logic and service layer
+│   └── main.py               # FastAPI application entry point
+├── .env                      # Configuration file (ignored by git)
+├── Dockerfile                # Docker build definition
+├── pyproject.toml            # Project and dependency definition
+└── uv.lock                   # Lock file for dependencies
 ```
 
 ## API Endpoints
 
 Here are the available endpoints:
 
-- **Health Check**
+- **Documentation**
 
-  - **GET** `/api/ping`
-  - **Description:** Verifies that the service is running.
-  - **Success Response:**
-
-    ```json
-    {
-      "message": "pong"
-    }
-    ```
+  - **GET** `/docs`
+  - **Description:** Documentation endpoint.
 
 ## Docker
 
