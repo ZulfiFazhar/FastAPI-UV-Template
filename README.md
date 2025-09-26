@@ -92,7 +92,7 @@ Use `uv run` to execute the application server.
 - **Development Mode (with auto-reload):**
 
   ```sh
-  uv run --watch uvicorn app.main:app --reload
+  uv run fastapi dev
   ```
 
 The application will be available at `http://localhost:8000`.
