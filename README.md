@@ -83,16 +83,16 @@ Available variables:
 
 Use `uv run` to execute the application server.
 
-- **Production Mode:**
-
-  ```sh
-  uv run uvicorn app.main:app --host 0.0.0.0 --port 8000
-  ```
-
 - **Development Mode (with auto-reload):**
 
   ```sh
   uv run fastapi dev
+  ```
+
+- **Production Mode:**
+
+  ```sh
+  uv run fastapi run
   ```
 
 The application will be available at `http://localhost:8000`.
