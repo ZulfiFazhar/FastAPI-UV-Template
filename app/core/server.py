@@ -57,7 +57,7 @@ def create_application() -> FastAPI:
     
     app = FastAPI(
         title=settings.app_name,
-        description="AI Service API for Raksha AI platform",
+        description="FastAPI UV Backend",
         version="1.0.0",
         docs_url="/docs" if not settings.is_production else None,
         redoc_url="/redoc" if not settings.is_production else None,
