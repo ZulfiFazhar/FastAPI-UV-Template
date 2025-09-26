@@ -66,18 +66,12 @@ Follow these steps to set up the local development environment.
    To install development dependencies (like `ruff` and `pytest`), use:
 
    ```sh
-   uv sync --with dev
+   uv sync --dev
    ```
 
 ### Configuration
 
-The application uses a `.env` file to manage configuration. Copy `.env.example` (if it exists) or create a new `.env` file in the project root.
-
-Available variables:
-
-- `APP_NAME`: The application name (default: "FastAPI UV Backend")
-- `ENVIRONMENT`: The environment (default: "development")
-- `PORT`: The port to run the application on (default: 8000)
+The application uses a `.env` file to manage configuration. Copy `.env.example` or create a new `.env` file in the project root.
 
 ## Running the Application
 
