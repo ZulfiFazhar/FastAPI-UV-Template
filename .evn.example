@@ -1,0 +1,3 @@
+APP_NAME=FastAPI UV Backend
+ENVIRONMENT=development
+PORT=8000
