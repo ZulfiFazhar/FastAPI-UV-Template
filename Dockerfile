@@ -1,14 +1,11 @@
-FROM python:3.10-slim
-
-# Install uv
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
-
-# Copy application code into the container
+FROM python:3.10-slim AS builder
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/
 COPY . /app
-
-# Install dependencies and lock them
 WORKDIR /app
-RUN uv sync --frozen --no-cache
+RUN uv sync --frozen --no-cache --no-dev
 
-# Run the FastAPI app
+FROM python:3.10-slim
+COPY --from=builder /app /app
+COPY --from=builder /bin/uv /bin/uv
+WORKDIR /app
 CMD ["uv", "run", "fastapi", "run"]
