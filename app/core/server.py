@@ -7,7 +7,7 @@ import time
 import logging
 
 from app.api import health_route
-from app.api.v1.router import router_v1
+from app.api.routes import router as api_router
 from app.core.config import settings
 from app.core.schema import create_success_response
 
@@ -59,24 +59,15 @@ def index_route(app) -> FastAPI:
     """Define the index route for the FastAPI application"""
     @app.get("/", tags=["welcome"])
     def _():
-        response, status_code = create_success_response(
+        response = create_success_response(
             message="Welcome to the FastAPI application!",
             data={
                 "version": settings.version,
                 "environment": settings.environment,
             }
         )
-        return JSONResponse(content=response.model_dump(), status_code=status_code)
+        return JSONResponse(content=response.model_dump(), status_code=200)
 
-    return app
-
-def v1_route(app) -> FastAPI:
-    """Include v1 API routes"""
-    app.include_router(
-        router_v1,
-        prefix="/api/v1",
-        tags=["v1"]
-    )
     return app
 
 def create_application() -> FastAPI:
@@ -93,9 +84,8 @@ def create_application() -> FastAPI:
     index_route(app)
 
     app.include_router(health_route.router)
-    
-    v1_route(app)
-    
+    app.include_router(api_router)
+
     logger.info("FastAPI application configured successfully")
 
     return app

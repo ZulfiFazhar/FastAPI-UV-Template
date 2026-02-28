@@ -1,27 +1,14 @@
-# Base image
-FROM python:3.10-slim AS base
-ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1
+FROM python:3.10-slim
 
 # Install uv
-RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/* \
- && curl -LsSf https://astral.sh/uv/install.sh | sh \
- && ln -s /root/.local/bin/uv /usr/local/bin/uv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
+# Copy application code into the container
+COPY . /app
+
+# Install dependencies and lock them
 WORKDIR /app
+RUN uv sync --frozen --no-cache
 
-# Hanya file deps untuk cache layer
-COPY pyproject.toml ./
-COPY uv.lock ./
-
-# Buat venv sistem dan install deps tanpa dev
-RUN uv sync --frozen --no-dev
-
-# Copy kode
-COPY app ./app
-
-# Re-sync untuk memastikan editable paths terinclude
-RUN uv sync --frozen --no-dev
-
-EXPOSE 8000
+# Run the FastAPI app
 CMD ["uv", "run", "fastapi", "run"]
