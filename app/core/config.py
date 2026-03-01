@@ -1,5 +1,4 @@
 from pydantic_settings import BaseSettings
-from typing import List
 from dotenv import load_dotenv
 import os
 
@@ -9,26 +8,20 @@ class Settings(BaseSettings):
     # Basic app settings
     app_name: str = os.getenv("APP_NAME")
     environment: str = os.getenv("ENVIRONMENT")
-    debug: bool = os.getenv("DEBUG")
     version: str = os.getenv("VERSION")
-    
-    # Server settings
-    host: str = os.getenv("HOST")
-    port: int = os.getenv("PORT")
 
-    # CORS settings
-    allowed_origins: str = os.getenv("ALLOWED_ORIGINS")
+    # CORS settings (JSON array format in .env)
+    allowed_origins: list[str] = ["http://localhost:5173"]
     
-    # Security settings (production)
-    allowed_hosts: str = os.getenv("ALLOWED_HOSTS")
-    secret_key: str = os.getenv("SECRET_KEY")
+    # Security settings (production, JSON array format in .env)
+    allowed_hosts: list[str] = ["localhost"]
 
     # ML settings
     ml_models_path: str = os.getenv("ML_MODELS_PATH")
 
     # Logging settings
     log_level: str = os.getenv("LOG_LEVEL")
-    log_format: str = "%(asctime)s - %(levelname)s - %(message)s"
+    log_format: str = "%(levelname)s - %(asctime)s - %(message)s"
 
     class Config:
         env_file = ".env"

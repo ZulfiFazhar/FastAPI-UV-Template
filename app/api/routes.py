@@ -1,8 +1,6 @@
 from fastapi import APIRouter
-from app.core.schema import BaseResponse, create_success_response
+from app.api.ping_route import router as ping_router
 
-router = APIRouter(prefix="/api", tags=["api"])
+router = APIRouter()
 
-@router.get("/ping", response_model=BaseResponse)
-async def ping():
-    return create_success_response(message="Ping successful", data="Pong!")
+router.include_router(ping_router, prefix="/ping", tags=["ping"])

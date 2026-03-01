@@ -1,23 +1,22 @@
 from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 
 import time
 import logging
 
-from app.api import health_route
+from app.api.health_route import router as health_route
 from app.api.routes import router as api_router
 from app.core.config import settings
 from app.core.schema import create_success_response
 
 logger = logging.getLogger(__name__)
 
-# def setup_logging():
-#     logging.basicConfig(
-#         level=getattr(logging, settings.log_level.upper()),
-#         format=settings.log_format
-#     )
+def setup_logging():
+    logging.basicConfig(
+        level=getattr(logging, settings.log_level.upper()),
+        format=settings.log_format
+    )
 
 def setup_middlewares(app: FastAPI):
     app.add_middleware(
@@ -35,7 +34,7 @@ def setup_middlewares(app: FastAPI):
         )
     
     @app.middleware("http")
-    async def add_timing(request: Request, call_next):
+    async def _(request: Request, call_next):
         start_time = time.time()
         response = await call_next(request)
         
@@ -46,7 +45,7 @@ def setup_middlewares(app: FastAPI):
         return response
     
     @app.middleware("http")
-    async def add_security_headers(request: Request, call_next):
+    async def _(request: Request, call_next):
         response = await call_next(request)
         response.headers.update({
             "X-Content-Type-Options": "nosniff",
@@ -59,20 +58,19 @@ def index_route(app) -> FastAPI:
     """Define the index route for the FastAPI application"""
     @app.get("/", tags=["welcome"])
     def _():
-        response = create_success_response(
+        return create_success_response(
             message="Welcome to the FastAPI application!",
             data={
                 "version": settings.version,
                 "environment": settings.environment,
             }
         )
-        return JSONResponse(content=response.model_dump(), status_code=200)
 
     return app
 
 def create_application() -> FastAPI:
     """Create and configure FastAPI application"""
-    # setup_logging()
+    setup_logging()
     
     app = FastAPI(
         title=settings.app_name,
@@ -83,8 +81,8 @@ def create_application() -> FastAPI:
     setup_middlewares(app)
     index_route(app)
 
-    app.include_router(health_route.router)
-    app.include_router(api_router)
+    app.include_router(health_route, tags=["health"])
+    app.include_router(api_router, tags=["api"], prefix="/api")
 
     logger.info("FastAPI application configured successfully")
 
